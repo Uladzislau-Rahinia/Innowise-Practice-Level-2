@@ -1,28 +1,26 @@
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import React from 'react';
-import logo from '../logo.svg';
-import './App.css';
+import LoginPage from 'core/pages/Login';
+import RegisterPage from 'core/pages/Register';
+import LINKS from 'core/utils/constants/links';
 
 const App: React.FC = () => (
-  <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Edit
-        {' '}
-        <code>src/App.tsx</code>
-        {' '}
-        and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-    </header>
-  </div>
+  <Router>
+    <Switch>
+      <Redirect from={LINKS.ROOT} to={LINKS.LOGIN} exact />
+      <Route path={LINKS.LOGIN}>
+        <LoginPage />
+      </Route>
+      <Route path={LINKS.REGISTER}>
+        <RegisterPage />
+      </Route>
+    </Switch>
+  </Router>
 );
 
 export default App;
