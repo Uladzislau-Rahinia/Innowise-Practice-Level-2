@@ -24,6 +24,7 @@ const firebaseApp = firebase.initializeApp(firebaseConfig);
 // firebase.analytics();
 const database = firebaseApp.database();
 const auth = firebaseApp.auth();
+const storage = firebaseApp.storage();
 
 // if (window.location.hostname === "localhost") {
 //   // Point to the RTDB emulator running on localhost.
@@ -31,4 +32,4 @@ const auth = firebaseApp.auth();
 //   auth.useEmulator("localhost", 9099);
 // }
 
-export { database, auth };
+export { database, auth, storage };

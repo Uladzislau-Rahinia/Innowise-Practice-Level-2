@@ -7,6 +7,7 @@ import {
 import React from 'react';
 import LoginPage from 'core/pages/Login';
 import RegisterPage from 'core/pages/Register';
+import Paint from 'core/pages/Paint';
 import LINKS from 'core/utils/constants/links';
 
 const App: React.FC = () => (
@@ -18,6 +19,9 @@ const App: React.FC = () => (
       </Route>
       <Route path={LINKS.REGISTER}>
         <RegisterPage />
+      </Route>
+      <Route path={LINKS.PAINT}>
+        <Paint />
       </Route>
     </Switch>
   </Router>

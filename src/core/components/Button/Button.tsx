@@ -3,7 +3,7 @@ import StyledButton from './styles';
 
 interface ButtonProps {
   text: string;
-  onClick: (e: SyntheticEvent)=>void;
+  onClick: ()=>void;
 }
 
 const Button = (props : ButtonProps) : JSX.Element => {
