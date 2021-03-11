@@ -28,7 +28,7 @@ const RegisterPage: React.FC = () => {
     try {
       const registerResult = await registerUser(email, password);
       // await createUserFolder(registerResult);
-      // history.push(LINKS.HOME);
+      history.push(LINKS.HOME);
     } catch (e) {
       showErrorToast(e);
     }

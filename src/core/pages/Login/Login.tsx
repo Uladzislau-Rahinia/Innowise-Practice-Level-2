@@ -22,7 +22,7 @@ const LoginPage: React.FC = () => {
     try {
       const res = await loginUser(email, password);
       console.log(res);
-      // history.push(LINKS.HOME);
+      history.push(LINKS.HOME);
     } catch (e) {
       showErrorToast(e);
     }
