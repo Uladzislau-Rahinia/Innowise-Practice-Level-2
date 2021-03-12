@@ -9,5 +9,5 @@ export const PaintWrapper = styled.div`
     flex-direction: column;
     justify-content: space-between;
     align-items:center;
-    height: 90vh;
+    min-height: 100vh;
 `;

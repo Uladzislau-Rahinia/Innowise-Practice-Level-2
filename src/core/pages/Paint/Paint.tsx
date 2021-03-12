@@ -3,7 +3,10 @@ import React, {
 } from 'react';
 import Button from 'core/components/Button';
 import { saveImage } from 'core/services/firebaseStorageQueries';
+import { useStore } from 'react-redux';
 import { PaintWrapper, StyledCanvas } from './styles';
+import ControlPanel from './components/ControlPanel';
+import { ButtonWrapper } from '../HomePage/styles';
 
 interface Position {
     offsetX: number,
@@ -15,7 +18,11 @@ const Paint: React.FC = () => {
 
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>();
   const [isPainting, setIsPainting] = useState(false);
-  const [prevPosition, setPrevPosition] = useState({ offsetX: 0, offsetY: 0 });
+  const [prevPos, setPrevPosition] = useState({ offsetX: 0, offsetY: 0 });
+  // const [currPos, setCurrPosition] = useState({ offsetX: 0, offsetY: 0 });
+  const [color, setColor] = useState('black');
+  const [instrument, setInstrument] = useState('0');
+  const [lineWidth, setLineWidth] = useState('1');
 
   useLayoutEffect(() => {
     if (canvasRef && canvasRef.current) {
@@ -29,16 +36,32 @@ const Paint: React.FC = () => {
     setIsPainting(true);
   };
 
-  const paint = (prevPos : Position, currPos : Position, strokeStyle:string) => {
-    const { offsetX, offsetY } = currPos;
+  const paint = (currPosition : Position) => {
+    const { offsetX, offsetY } = currPosition;
     const { offsetX: x, offsetY: y } = prevPos;
     if (ctx) {
+      ctx.strokeStyle = color;
+      ctx.lineCap = 'round';
+      ctx.lineWidth = parseInt(lineWidth, 10);
       ctx.beginPath();
-      ctx.strokeStyle = strokeStyle;
-      // Move the the prevPosition of the mouse
-      ctx.moveTo(x, y);
-      // Draw a line to the current position of the mouse
-      ctx.lineTo(offsetX, offsetY);
+      switch (instrument) {
+        case '0':
+          ctx.moveTo(x, y);
+          ctx.lineTo(offsetX, offsetY);
+
+          break;
+        case '1':
+          ctx.rect(
+            x,
+            y,
+            Math.abs(offsetX - x),
+            Math.abs(offsetY - y),
+          );
+          break;
+        case '2':
+          break;
+        default:
+      }
       // Visualize the line using the strokeStyle
       ctx.stroke();
     }
@@ -48,8 +71,8 @@ const Paint: React.FC = () => {
   const handleMouseMove = ({ nativeEvent } : SyntheticEvent) => {
     if (isPainting) {
       const { offsetX, offsetY } = nativeEvent as MouseEvent;
-      const offSetData : Position = { offsetX, offsetY };
-      paint(prevPosition, offSetData, '#FF0000');
+      const currPos: Position = { offsetX, offsetY };
+      paint(currPos);
     }
   };
 
@@ -82,8 +105,15 @@ const Paint: React.FC = () => {
         width={500}
         height={500}
       />
-      <Button onClick={handleClear} text="Clear canvas" />
-      <Button onClick={handleSave} text="Save your drawing" />
+      <ControlPanel
+        handleLineWidthPick={(e) => setLineWidth((e.target as HTMLInputElement).value)}
+        handleColorPick={(e) => { setColor(e.currentTarget.id); }}
+        handleInstrumentPick={(e) => { setInstrument(e.currentTarget.id); }}
+      />
+      <ButtonWrapper>
+        <Button onClick={handleClear} text="Clear canvas" />
+        <Button onClick={handleSave} text="Save your drawing" />
+      </ButtonWrapper>
     </PaintWrapper>
   );
 };
