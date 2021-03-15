@@ -1,5 +1,5 @@
 import React, {
-  SyntheticEvent, useLayoutEffect, useRef, useState,
+  SyntheticEvent, useCallback, useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
 import Button from 'core/components/Button';
 import { saveImage } from 'core/services/firebaseStorageQueries';
@@ -17,9 +17,9 @@ const Paint: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>();
-  const [isPainting, setIsPainting] = useState(false);
-  const [prevPos, setPrevPosition] = useState({ offsetX: 0, offsetY: 0 });
-  // const [currPos, setCurrPosition] = useState({ offsetX: 0, offsetY: 0 });
+  const [isPainting, setIsPainting] = useState<boolean>(false);
+  const [prevPos, setPrevPosition] = useState<Position>({ offsetX: 0, offsetY: 0 });
+  const [snapshot, setSnapshot] = useState<ImageData>();
   const [color, setColor] = useState('black');
   const [instrument, setInstrument] = useState('0');
   const [lineWidth, setLineWidth] = useState('1');
@@ -30,9 +30,15 @@ const Paint: React.FC = () => {
     }
   }, []);
 
+  const loadSnapshot = useCallback(() => {
+    console.log(snapshot);
+    if (snapshot) { ctx?.putImageData(snapshot, 0, 0); }
+  }, [snapshot]);
+
   const handleMouseDown = ({ nativeEvent } : SyntheticEvent) => {
     const { offsetX, offsetY } = nativeEvent as MouseEvent;
     setPrevPosition({ offsetX, offsetY });
+    loadSnapshot();
     setIsPainting(true);
   };
 
@@ -40,6 +46,9 @@ const Paint: React.FC = () => {
     const { offsetX, offsetY } = currPosition;
     const { offsetX: x, offsetY: y } = prevPos;
     if (ctx) {
+      const deltaX = x - offsetX;
+      const deltaY = y - offsetY;
+      const radius = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
       ctx.strokeStyle = color;
       ctx.lineCap = 'round';
       ctx.lineWidth = parseInt(lineWidth, 10);
@@ -48,24 +57,31 @@ const Paint: React.FC = () => {
         case '0':
           ctx.moveTo(x, y);
           ctx.lineTo(offsetX, offsetY);
-
+          setPrevPosition({ offsetX, offsetY });
           break;
         case '1':
+          ctx.clearRect(0, 0, canvasRef.current!.width,
+            canvasRef.current!.height);
+          loadSnapshot();
           ctx.rect(
             x,
             y,
-            Math.abs(offsetX - x),
-            Math.abs(offsetY - y),
+            offsetX - x,
+            offsetY - y,
           );
           break;
         case '2':
+          ctx.clearRect(0, 0, canvasRef.current!.width,
+            canvasRef.current!.height);
+          loadSnapshot();
+
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
           break;
         default:
       }
       // Visualize the line using the strokeStyle
       ctx.stroke();
     }
-    setPrevPosition({ offsetX, offsetY });
   };
 
   const handleMouseMove = ({ nativeEvent } : SyntheticEvent) => {
@@ -78,18 +94,21 @@ const Paint: React.FC = () => {
 
   const endPainting = () => {
     setIsPainting(false);
+    // ctx?.save();
+    setSnapshot(ctx!.getImageData(0, 0, canvasRef.current!.width, canvasRef.current!.height));
   };
 
   const handleClear = () => {
     if (ctx && canvasRef && canvasRef.current) {
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      // setSnapshot(new ImageData());
     }
   };
 
   const handleSave = () => {
     console.log('save');
-    const dataURL = canvasRef.current?.toDataURL();
-    if (dataURL) { saveImage(dataURL); }
+    const data = canvasRef.current?.toDataURL();
+    if (data) { saveImage(data); }
   };
 
   return (
