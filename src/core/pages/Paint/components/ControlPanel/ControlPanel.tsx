@@ -14,20 +14,35 @@ interface ControlPanelProps {
   handleColorPick: (e: SyntheticEvent) => void;
   handleLineWidthPick: (e: SyntheticEvent) => void;
   handleInstrumentPick: (e: SyntheticEvent) => void;
+  pickedInstrument: string;
+  pickedColor:string;
+
 }
 
 const ControlPanel = (props: ControlPanelProps): JSX.Element => {
-  const { handleColorPick, handleLineWidthPick, handleInstrumentPick } = props;
+  const {
+    handleColorPick, handleLineWidthPick, handleInstrumentPick, pickedInstrument, pickedColor,
+  } = props;
   return (
     <ControlPanelWrapper>
       <ColorPickerContainer>
         {colors.map((value) => (
-          <ColorPickerItem id={value} onClick={handleColorPick} color={value} />
+          <ColorPickerItem
+            isPicked={value === pickedColor}
+            id={value}
+            onClick={handleColorPick}
+            color={value}
+          />
         ))}
       </ColorPickerContainer>
       <InstrumentPickerContainer>
         {instruments.map((value, index) => (
-          <Instrument src={value} id={index.toString()} onClick={handleInstrumentPick} />
+          <Instrument
+            isPicked={index.toString() === pickedInstrument}
+            src={value}
+            id={index.toString()}
+            onClick={handleInstrumentPick}
+          />
         ))}
       </InstrumentPickerContainer>
       <LineWidthSlider

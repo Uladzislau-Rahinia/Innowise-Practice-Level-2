@@ -2,8 +2,9 @@ import React, {
   SyntheticEvent, useCallback, useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
 import Button from 'core/components/Button';
-import { saveImage } from 'core/services/firebaseStorageQueries';
-import { useStore } from 'react-redux';
+import { getImage, saveImage } from 'core/services/firebaseStorageQueries';
+import { getUserId } from 'core/services/firebaseAuthQueries';
+import { addNewPost } from 'core/services/firebaseDBQueries';
 import { PaintWrapper, StyledCanvas } from './styles';
 import ControlPanel from './components/ControlPanel';
 import { ButtonWrapper } from '../HomePage/styles';
@@ -112,10 +113,15 @@ const Paint: React.FC = () => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     console.log('save');
     const data = canvasRef.current?.toDataURL();
-    if (data) { saveImage(data); }
+    if (data) {
+      const imgPath = await saveImage(data, getUserId());
+      const imgURL = await getImage(imgPath);
+      const newPost = { path: imgURL, author: 'sdfsdfsdf', date: 'sdfsdf' };
+      addNewPost(newPost, 'posts');
+    }
   };
 
   return (
@@ -132,6 +138,8 @@ const Paint: React.FC = () => {
         height={500}
       />
       <ControlPanel
+        pickedColor={color}
+        pickedInstrument={instrument}
         handleLineWidthPick={(e) => setLineWidth((e.target as HTMLInputElement).value)}
         handleColorPick={(e) => { setColor(e.currentTarget.id); }}
         handleInstrumentPick={(e) => { setInstrument(e.currentTarget.id); }}

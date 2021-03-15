@@ -3,28 +3,24 @@ import Button from 'core/components/Button/Button';
 import ButtonLink from 'core/components/Link';
 import LINKS from 'core/utils/constants/links';
 import { logoutUser } from 'core/services/firebaseAuthQueries';
-import { getImage } from 'core/services/firebaseStorageQueries';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchPosts } from './Slices/PostFeedSlice';
 import { TodoListWrapper, ButtonWrapper } from './styles';
+import PostsFeed from './components/PostsFeed';
 
 const HomePage:React.FC = () => {
   const history = useHistory();
 
-  const [image, setImage] = useState('');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, []);
 
   const handleLogOut = async () => {
     await logoutUser();
     history.push(LINKS.LOGIN);
   };
-
-  const getImageHandler = async () => {
-    const res = await getImage('test/image.png');
-    setImage(res);
-  };
-
-  useEffect(() => {
-    getImageHandler();
-  }, []);
 
   return (
     <TodoListWrapper>
@@ -35,7 +31,7 @@ const HomePage:React.FC = () => {
         />
         <Button onClick={handleLogOut} text="Log Out" />
       </ButtonWrapper>
-      <img src={image} alt="" />
+      <PostsFeed />
     </TodoListWrapper>
   );
 };
