@@ -1,12 +1,12 @@
 import { database } from 'core/api/firebase';
 import { Post } from 'core/utils/types';
 
-// export const createUserFolder = async (uid) => {
-//   const tasksRef = database.ref('tasks/');
-//   const newUser = {};
-//   newUser[`${uid}`] = '';
-//   return tasksRef.update(newUser).then(() => true);
-// };
+export const createUser = async (uid:string, username:string):Promise<boolean> => {
+  const tasksRef = database.ref(`users/${uid}`);
+  const newUser = { username: '' };
+  newUser.username = username;
+  return tasksRef.update(newUser).then(() => true);
+};
 
 export const getPosts = async (route:string):Promise<any> => {
   const postsRef = database.ref(route);

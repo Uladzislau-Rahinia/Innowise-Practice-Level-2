@@ -124,6 +124,12 @@ const Paint: React.FC = () => {
     }
   };
 
+  const handleLineWidthPick = useCallback((e) => {
+    setLineWidth((e.target as HTMLInputElement).value);
+  }, []);
+  const handleInstrumentPick = useCallback((e) => { setInstrument(e.currentTarget.id); }, []);
+  const handleColorPick = useCallback((e) => { setColor(e.currentTarget.id); }, []);
+
   return (
     <PaintWrapper>
       <span>Draw here</span>
@@ -140,9 +146,9 @@ const Paint: React.FC = () => {
       <ControlPanel
         pickedColor={color}
         pickedInstrument={instrument}
-        handleLineWidthPick={(e) => setLineWidth((e.target as HTMLInputElement).value)}
-        handleColorPick={(e) => { setColor(e.currentTarget.id); }}
-        handleInstrumentPick={(e) => { setInstrument(e.currentTarget.id); }}
+        handleLineWidthPick={handleLineWidthPick}
+        handleColorPick={handleColorPick}
+        handleInstrumentPick={handleInstrumentPick}
       />
       <ButtonWrapper>
         <Button onClick={handleClear} text="Clear canvas" />

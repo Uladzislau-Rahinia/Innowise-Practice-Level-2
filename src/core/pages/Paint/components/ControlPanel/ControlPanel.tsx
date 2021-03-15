@@ -19,7 +19,7 @@ interface ControlPanelProps {
 
 }
 
-const ControlPanel = (props: ControlPanelProps): JSX.Element => {
+const ControlPanel = React.memo((props: ControlPanelProps): JSX.Element => {
   const {
     handleColorPick, handleLineWidthPick, handleInstrumentPick, pickedInstrument, pickedColor,
   } = props;
@@ -55,6 +55,6 @@ const ControlPanel = (props: ControlPanelProps): JSX.Element => {
       />
     </ControlPanelWrapper>
   );
-};
+});
 
 export default ControlPanel;
