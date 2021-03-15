@@ -1,8 +1,6 @@
 import React, { SyntheticEvent } from 'react';
-import colors from 'core/utils/constants/colors';
-import brush from 'core/assets/brush.png';
-import rect from 'core/assets/rect.png';
-import circle from 'core/assets/circle.png';
+import colors from './colors';
+import instruments from './instruments';
 import {
   ControlPanelWrapper,
   ColorPickerContainer,
@@ -11,8 +9,6 @@ import {
   InstrumentPickerContainer,
   Instrument,
 } from './styles';
-
-const instruments = [brush, rect, circle];
 
 interface ControlPanelProps {
   handleColorPick: (e: SyntheticEvent) => void;

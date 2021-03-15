@@ -63,6 +63,13 @@ const Paint: React.FC = () => {
           ctx.clearRect(0, 0, canvasRef.current!.width,
             canvasRef.current!.height);
           loadSnapshot();
+          ctx.moveTo(x, y);
+          ctx.lineTo(offsetX, offsetY);
+          break;
+        case '2':
+          ctx.clearRect(0, 0, canvasRef.current!.width,
+            canvasRef.current!.height);
+          loadSnapshot();
           ctx.rect(
             x,
             y,
@@ -70,7 +77,7 @@ const Paint: React.FC = () => {
             offsetY - y,
           );
           break;
-        case '2':
+        case '3':
           ctx.clearRect(0, 0, canvasRef.current!.width,
             canvasRef.current!.height);
           loadSnapshot();
