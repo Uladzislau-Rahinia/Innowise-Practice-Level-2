@@ -4,7 +4,7 @@ import TextInput from 'core/components/textInput';
 import Button from 'core/components/Button';
 import ToastContainer, { showErrorToast } from 'core/services/showToast';
 import { registerUser } from 'core/services/firebaseAuthQueries';
-// import { createUserFolder } from 'core/services/firebaseDBQueries';
+import { createUser } from 'core/services/firebaseDBQueries';
 import LINKS from 'core/utils/constants/links';
 import { RegisterWrapper, RegisterContainer } from './styles';
 
@@ -12,11 +12,12 @@ const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordComfirm, setPasswordConfirm] = useState('');
+  const [username, setUsername] = useState('');
 
   const history = useHistory();
 
   const handleSignUp = async () => {
-    if (email === '' || password === '' || passwordComfirm === '') {
+    if (email === '' || username === '' || password === '' || passwordComfirm === '') {
       showErrorToast('Fill all fields please');
       return;
     }
@@ -27,7 +28,7 @@ const RegisterPage: React.FC = () => {
 
     try {
       const registerResult = await registerUser(email, password);
-      // await createUserFolder(registerResult);
+      await createUser(registerResult, username);
       history.push(LINKS.HOME);
     } catch (e) {
       showErrorToast(e);
@@ -44,6 +45,12 @@ const RegisterPage: React.FC = () => {
           value={email}
           type="text"
           placeholder="E-mail"
+        />
+        <TextInput
+          onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
+          value={username}
+          type="text"
+          placeholder="Username"
         />
         <TextInput
           onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
