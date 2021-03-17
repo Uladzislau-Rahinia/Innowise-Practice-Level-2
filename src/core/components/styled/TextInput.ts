@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const StyledInput = styled.input`
+const TextInput = styled.input`
   font-family: inherit;
   height: 30px;
   border: 3px solid orange;
@@ -9,4 +9,4 @@ const StyledInput = styled.input`
   outline: none;
 `;
 
-export default StyledInput;
+export default TextInput;

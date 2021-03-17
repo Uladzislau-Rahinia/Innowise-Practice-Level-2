@@ -3,3 +3,11 @@ export interface Post {
     author: string,
     date: string
 }
+
+export interface UserData {
+    uid : string,
+    username : string,
+    isLoggedIn : boolean,
+    isError: boolean,
+    errorMessage: string
+}

@@ -16,9 +16,9 @@ export const PostsFeedSlice = createSlice({
     // },
   },
   extraReducers: {
-    [fetchPosts.fulfilled.toString()]: (state, action:PayloadAction<Post>) => {
-      Object.entries(action.payload).map((postsFeed) => state.push(postsFeed[1]));
-    },
+    [fetchPosts.fulfilled.toString()]: (state, action:PayloadAction<Post>) => (
+      Object.entries(action.payload).map((postsFeed) => postsFeed[1])
+    ),
     [fetchPosts.rejected.toString()]: (state, action) => {
       // action.payload.map((postsFeed) => state.push(postsFeed));
       console.log(action);

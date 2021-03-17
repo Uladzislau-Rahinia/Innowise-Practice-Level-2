@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import TextInput from 'core/components/textInput';
-import Button from 'core/components/Button';
-import { loginUser } from 'core/services/firebaseAuthQueries';
+import TextInput from 'core/components/styled/TextInput';
+import Button from 'core/components/styled/Button';
 import ToastContainer, { showErrorToast } from 'core/services/showToast';
 import LINKS from 'core/utils/constants/links';
+import { signIn, clearState } from 'redux/slices/UserSlice';
+import getUserData from 'redux/selectors/UserSelector';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { LoginWrapper, LoginContainer } from './styles';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { isLoggedIn, isError, errorMessage } = useSelector(getUserData);
+  const dispatch = useDispatch();
 
   const history = useHistory();
 
@@ -19,14 +25,21 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    try {
-      const res = await loginUser(email, password);
-      console.log(res);
-      history.push(LINKS.HOME);
-    } catch (e) {
-      showErrorToast(e);
-    }
+    dispatch(signIn({ email, password }));
+    // const res = await loginUser(email, password);
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(clearState());
+      history.push(LINKS.HOME);
+    }
+
+    if (isError) {
+      showErrorToast(errorMessage);
+      dispatch(clearState());
+    }
+  }, [isLoggedIn, isError]);
 
   return (
     <LoginWrapper>
@@ -45,7 +58,7 @@ const LoginPage: React.FC = () => {
           type="password"
           placeholder="Password"
         />
-        <Button onClick={handleLogin} text="Sign In" />
+        <Button onClick={handleLogin}>Sign In</Button>
         <Link to="/register">Dont have an account? Sign Up here!</Link>
       </LoginContainer>
       <ToastContainer />

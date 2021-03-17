@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import TextInput from 'core/components/textInput';
-import Button from 'core/components/Button';
+import TextInput from 'core/components/styled/TextInput';
+import Button from 'core/components/styled/Button';
 import ToastContainer, { showErrorToast } from 'core/services/showToast';
-import { registerUser } from 'core/services/firebaseAuthQueries';
-import { createUser } from 'core/services/firebaseDBQueries';
 import LINKS from 'core/utils/constants/links';
+import { clearState, signUp } from 'redux/slices/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import getUserData from 'redux/selectors/UserSelector';
 import { RegisterWrapper, RegisterContainer } from './styles';
 
 const RegisterPage: React.FC = () => {
@@ -16,8 +17,16 @@ const RegisterPage: React.FC = () => {
 
   const history = useHistory();
 
+  const dispatch = useDispatch();
+  const { isError, isLoggedIn, errorMessage } = useSelector(getUserData);
+
   const handleSignUp = async () => {
-    if (email === '' || username === '' || password === '' || passwordComfirm === '') {
+    if (
+      email === ''
+      || username === ''
+      || password === ''
+      || passwordComfirm === ''
+    ) {
       showErrorToast('Fill all fields please');
       return;
     }
@@ -26,14 +35,19 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
-    try {
-      const registerResult = await registerUser(email, password);
-      await createUser(registerResult, username);
-      history.push(LINKS.HOME);
-    } catch (e) {
-      showErrorToast(e);
-    }
+    dispatch(signUp({ email, password, username }));
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(clearState());
+      history.push(LINKS.HOME);
+    }
+    if (isError) {
+      dispatch(clearState());
+      showErrorToast(errorMessage);
+    }
+  });
 
   return (
     <RegisterWrapper>
@@ -64,7 +78,7 @@ const RegisterPage: React.FC = () => {
           type="password"
           placeholder="Comfirm password"
         />
-        <Button onClick={handleSignUp} text="Sign Up" />
+        <Button onClick={handleSignUp}>Sign Up</Button>
         <Link to="/login">Already have an account? Sign In here!</Link>
       </RegisterContainer>
       <ToastContainer />

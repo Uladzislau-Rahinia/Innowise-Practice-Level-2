@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const StyledLink = styled(Link)`
-  max-width: 280px;
+const ButtonLink = styled(Link)`
+  max-width: 220px;
   width: 40%;
   height: 30px;
   background-color: orange;
@@ -17,4 +17,4 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-export default StyledLink;
+export default ButtonLink;

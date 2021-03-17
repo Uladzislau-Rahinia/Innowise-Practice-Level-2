@@ -1,10 +1,15 @@
 import React, {
   SyntheticEvent, useCallback, useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
-import Button from 'core/components/Button';
+import Button from 'core/components/styled/Button';
 import { getImage, saveImage } from 'core/services/firebaseStorageQueries';
 import { getUserId } from 'core/services/firebaseAuthQueries';
 import { addNewPost } from 'core/services/firebaseDBQueries';
+import getUserData from 'redux/selectors/UserSelector';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import ButtonLink from 'core/components/styled/Link';
+import LINKS from 'core/utils/constants/links';
 import { PaintWrapper, StyledCanvas } from './styles';
 import ControlPanel from './components/ControlPanel';
 import { ButtonWrapper } from '../HomePage/styles';
@@ -24,6 +29,14 @@ const Paint: React.FC = () => {
   const [color, setColor] = useState('black');
   const [instrument, setInstrument] = useState('0');
   const [lineWidth, setLineWidth] = useState('1');
+
+  const history = useHistory();
+
+  const { username, isLoggedIn } = useSelector(getUserData);
+
+  useEffect(() => {
+    if (!isLoggedIn) history.push(LINKS.LOGIN);
+  }, [isLoggedIn]);
 
   useLayoutEffect(() => {
     if (canvasRef && canvasRef.current) {
@@ -87,7 +100,6 @@ const Paint: React.FC = () => {
           break;
         default:
       }
-      // Visualize the line using the strokeStyle
       ctx.stroke();
     }
   };
@@ -102,14 +114,12 @@ const Paint: React.FC = () => {
 
   const endPainting = () => {
     setIsPainting(false);
-    // ctx?.save();
     setSnapshot(ctx!.getImageData(0, 0, canvasRef.current!.width, canvasRef.current!.height));
   };
 
   const handleClear = () => {
     if (ctx && canvasRef && canvasRef.current) {
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-      // setSnapshot(new ImageData());
     }
   };
 
@@ -119,8 +129,9 @@ const Paint: React.FC = () => {
     if (data) {
       const imgPath = await saveImage(data, getUserId());
       const imgURL = await getImage(imgPath);
-      const newPost = { path: imgURL, author: 'sdfsdfsdf', date: 'sdfsdf' };
-      addNewPost(newPost, 'posts');
+      const newPost = { path: imgURL, author: username, date: new Date(Date.now()).toString() };
+      await addNewPost(newPost, 'posts');
+      history.push(LINKS.HOME);
     }
   };
 
@@ -151,8 +162,9 @@ const Paint: React.FC = () => {
         handleInstrumentPick={handleInstrumentPick}
       />
       <ButtonWrapper>
-        <Button onClick={handleClear} text="Clear canvas" />
-        <Button onClick={handleSave} text="Save your drawing" />
+        <ButtonLink to="/home">Go back</ButtonLink>
+        <Button isDanger onClick={handleClear}>Clear canvas</Button>
+        <Button onClick={handleSave}>Save your drawing</Button>
       </ButtonWrapper>
     </PaintWrapper>
   );
