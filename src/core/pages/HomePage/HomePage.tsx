@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from 'redux/slices/PostFeedSlice';
 import getUserData from 'redux/selectors/UserSelector';
 import { logOut } from 'redux/slices/UserSlice';
-import { TodoListWrapper, ButtonWrapper } from './styles';
+import { PaintListWrapper, ButtonWrapper } from './styles';
 import PostsFeed from './components/PostsFeed';
 
 const HomePage:React.FC = () => {
@@ -30,13 +30,13 @@ const HomePage:React.FC = () => {
   };
 
   return (
-    <TodoListWrapper>
+    <PaintListWrapper>
       <ButtonWrapper>
         <ButtonLink to={LINKS.PAINT}>+ New painting</ButtonLink>
         <Button onClick={handleLogOut}>Log Out</Button>
       </ButtonWrapper>
       <PostsFeed />
-    </TodoListWrapper>
+    </PaintListWrapper>
   );
 };
 

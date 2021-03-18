@@ -7,9 +7,10 @@ import { getUserId } from 'core/services/firebaseAuthQueries';
 import { addNewPost } from 'core/services/firebaseDBQueries';
 import getUserData from 'redux/selectors/UserSelector';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ButtonLink from 'core/components/styled/Link';
 import LINKS from 'core/utils/constants/links';
+import { savePost } from 'redux/slices/PostFeedSlice';
 import { PaintWrapper, StyledCanvas } from './styles';
 import ControlPanel from './components/ControlPanel';
 import { ButtonWrapper } from '../HomePage/styles';
@@ -32,7 +33,9 @@ const Paint: React.FC = () => {
 
   const history = useHistory();
 
-  const { username, isLoggedIn } = useSelector(getUserData);
+  const dispatch = useDispatch();
+
+  const { username, isLoggedIn, uid } = useSelector(getUserData);
 
   useEffect(() => {
     if (!isLoggedIn) history.push(LINKS.LOGIN);
@@ -127,10 +130,7 @@ const Paint: React.FC = () => {
     console.log('save');
     const data = canvasRef.current?.toDataURL();
     if (data) {
-      const imgPath = await saveImage(data, getUserId());
-      const imgURL = await getImage(imgPath);
-      const newPost = { path: imgURL, author: username, date: new Date(Date.now()).toString() };
-      await addNewPost(newPost, 'posts');
+      dispatch(savePost({ img: data, uid, username }));
       history.push(LINKS.HOME);
     }
   };

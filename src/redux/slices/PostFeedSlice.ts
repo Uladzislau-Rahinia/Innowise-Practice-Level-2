@@ -1,11 +1,20 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { getPosts } from 'core/services/firebaseDBQueries';
+import { addNewPost, getPosts } from 'core/services/firebaseDBQueries';
+import { saveImage, getImage } from 'core/services/firebaseStorageQueries';
 import { Post } from 'core/utils/types';
 
 export const fetchPosts = createAsyncThunk('postsFeed/fetchPosts', async () => {
   const res = await getPosts('posts');
   return res;
 });
+
+export const savePost = createAsyncThunk('postsFeed/savePost',
+  async ({ img, uid, username }: {img:string, uid:string, username:string}) => {
+    const imgPath = await saveImage(img, uid);
+    const imgURL = await getImage(imgPath);
+    const newPost = { path: imgURL, author: username, date: new Date(Date.now()).toString() };
+    await addNewPost(newPost, 'posts');
+  });
 
 export const PostsFeedSlice = createSlice({
   name: 'postsFeed',

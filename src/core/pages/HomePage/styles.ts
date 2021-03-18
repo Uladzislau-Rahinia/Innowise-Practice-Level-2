@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const TodoListWrapper = styled.div`
+export const PaintListWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -12,4 +12,5 @@ export const ButtonWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-evenly;
+  margin:20px;
 `;
