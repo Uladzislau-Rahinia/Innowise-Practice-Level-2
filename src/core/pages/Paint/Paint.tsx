@@ -143,12 +143,15 @@ const Paint: React.FC = () => {
       <StyledCanvas
         ref={canvasRef}
         onMouseMove={handleMouseMove}
+        onTouchStart={handleMouseDown}
+        onTouchMove={handleMouseMove}
+        onTouchEnd={endPainting}
         onMouseDown={handleMouseDown}
         onMouseLeave={endPainting}
         onMouseUp={endPainting}
         id="canvas"
-        width={500}
-        height={500}
+        width={window.outerWidth < 500 ? window.outerWidth * 0.95 : 500}
+        height={window.outerWidth < 500 ? window.outerWidth * 0.95 : 500}
       />
       <ControlPanel
         pickedColor={color}
