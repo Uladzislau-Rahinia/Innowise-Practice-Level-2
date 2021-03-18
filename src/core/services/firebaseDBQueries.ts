@@ -1,6 +1,10 @@
 import { database } from 'core/api/firebase';
 import { Post } from 'core/utils/types';
 
+interface Posts {
+  [name:string]:Post
+}
+
 export const createUser = async (uid:string, username:string):Promise<boolean> => {
   const tasksRef = database.ref(`users/${uid}`);
   const newUser = { username: '' };
@@ -8,7 +12,7 @@ export const createUser = async (uid:string, username:string):Promise<boolean> =
   return tasksRef.update(newUser).then(() => true);
 };
 
-export const getPosts = async (route:string):Promise<any> => {
+export const getPosts = async (route:string):Promise<Posts> => {
   const postsRef = database.ref(route);
   return postsRef.get().then((snapshot) => {
     console.log(snapshot);

@@ -8,9 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ButtonLink from 'core/components/styled/Link';
 import LINKS from 'core/utils/constants/links';
 import { savePost } from 'redux/slices/PostFeedSlice';
-import { PaintWrapper, StyledCanvas } from './styles';
+import { PaintWrapper, StyledCanvas, ButtonWrapper } from './styles';
 import ControlPanel from './components/ControlPanel';
-import { ButtonWrapper } from '../HomePage/styles';
 
 interface Position {
     offsetX: number,
@@ -50,8 +49,20 @@ const Paint: React.FC = () => {
   }, [snapshot]);
 
   const handleMouseDown = ({ nativeEvent } : SyntheticEvent) => {
-    const { offsetX, offsetY } = nativeEvent as MouseEvent;
-    setPrevPosition({ offsetX, offsetY });
+    nativeEvent.preventDefault();
+    if (nativeEvent instanceof TouchEvent) {
+      const touch = nativeEvent as TouchEvent;
+      const { pageX, pageY } = touch.touches[0];
+      console.log(touch.touches[0]);
+      setPrevPosition({
+        offsetX: pageX - canvasRef.current!.offsetLeft,
+        offsetY: pageY - canvasRef.current!.offsetTop,
+      });
+    } else {
+      const { offsetX, offsetY } = nativeEvent as MouseEvent;
+      setPrevPosition({ offsetX, offsetY });
+    }
+
     loadSnapshot();
     setIsPainting(true);
   };
@@ -59,6 +70,7 @@ const Paint: React.FC = () => {
   const paint = (currPosition : Position) => {
     const { offsetX, offsetY } = currPosition;
     const { offsetX: x, offsetY: y } = prevPos;
+    console.log(prevPos, currPosition);
     if (ctx) {
       const deltaX = x - offsetX;
       const deltaY = y - offsetY;
@@ -106,8 +118,18 @@ const Paint: React.FC = () => {
 
   const handleMouseMove = ({ nativeEvent } : SyntheticEvent) => {
     if (isPainting) {
-      const { offsetX, offsetY } = nativeEvent as MouseEvent;
-      const currPos: Position = { offsetX, offsetY };
+      let currPos: Position;
+      if (nativeEvent instanceof TouchEvent) {
+        const touch = nativeEvent as TouchEvent;
+        const { pageX, pageY } = touch.touches[0];
+        currPos = ({
+          offsetX: pageX - canvasRef.current!.offsetLeft,
+          offsetY: pageY - canvasRef.current!.offsetTop,
+        });
+      } else {
+        const { offsetX, offsetY } = nativeEvent as MouseEvent;
+        currPos = ({ offsetX, offsetY });
+      }
       paint(currPos);
     }
   };

@@ -16,7 +16,6 @@ interface ControlPanelProps {
   handleInstrumentPick: (e: SyntheticEvent) => void;
   pickedInstrument: string;
   pickedColor:string;
-
 }
 
 const ControlPanel = React.memo((props: ControlPanelProps): JSX.Element => {
@@ -25,6 +24,7 @@ const ControlPanel = React.memo((props: ControlPanelProps): JSX.Element => {
   } = props;
   return (
     <ControlPanelWrapper>
+      <span>Colors:</span>
       <ColorPickerContainer>
         {colors.map((value) => (
           <ColorPickerItem
@@ -35,6 +35,7 @@ const ControlPanel = React.memo((props: ControlPanelProps): JSX.Element => {
           />
         ))}
       </ColorPickerContainer>
+      <span>Tools:</span>
       <InstrumentPickerContainer>
         {instruments.map((value, index) => (
           <Instrument
@@ -45,6 +46,7 @@ const ControlPanel = React.memo((props: ControlPanelProps): JSX.Element => {
           />
         ))}
       </InstrumentPickerContainer>
+      <span>Thickness:</span>
       <LineWidthSlider
         defaultValue={1}
         min={1}
