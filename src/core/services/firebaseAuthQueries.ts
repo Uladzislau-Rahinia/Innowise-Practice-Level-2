@@ -28,8 +28,3 @@ export const registerUser = async (email:string, password:string) : Promise<stri
   });
 
 export const logoutUser = async (): Promise<void> => auth.signOut();
-
-export const getUserId = (): string => {
-  if (auth.currentUser) return auth.currentUser.uid;
-  return '';
-};

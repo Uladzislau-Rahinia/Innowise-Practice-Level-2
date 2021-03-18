@@ -17,6 +17,7 @@ const HomePage:React.FC = () => {
   const { isLoggedIn } = useSelector(getUserData);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(fetchPosts());

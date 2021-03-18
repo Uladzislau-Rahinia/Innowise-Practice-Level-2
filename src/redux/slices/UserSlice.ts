@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { createUser, getUsername } from 'core/services/firebaseDBQueries';
 import {
-  getUserId, loginUser, logoutUser, registerUser,
+  loginUser, logoutUser, registerUser,
 } from 'core/services/firebaseAuthQueries';
 import { UserData } from 'core/utils/types';
 

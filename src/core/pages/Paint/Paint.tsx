@@ -2,9 +2,6 @@ import React, {
   SyntheticEvent, useCallback, useEffect, useLayoutEffect, useRef, useState,
 } from 'react';
 import Button from 'core/components/styled/Button';
-import { getImage, saveImage } from 'core/services/firebaseStorageQueries';
-import { getUserId } from 'core/services/firebaseAuthQueries';
-import { addNewPost } from 'core/services/firebaseDBQueries';
 import getUserData from 'redux/selectors/UserSelector';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -127,7 +124,6 @@ const Paint: React.FC = () => {
   };
 
   const handleSave = async () => {
-    console.log('save');
     const data = canvasRef.current?.toDataURL();
     if (data) {
       dispatch(savePost({ img: data, uid, username }));
