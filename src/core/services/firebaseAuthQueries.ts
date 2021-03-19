@@ -1,5 +1,6 @@
 import { auth } from 'core/api/firebase';
 import ERROR_MESSAGES from 'core/utils/constants/errors';
+import { useDispatch } from 'react-redux';
 
 export const loginUser = async (email:string, password:string):Promise<string> => auth
   .signInWithEmailAndPassword(email, password)

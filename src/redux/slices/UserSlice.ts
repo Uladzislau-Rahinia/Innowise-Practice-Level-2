@@ -19,6 +19,15 @@ export const signIn = createAsyncThunk('user/signIn',
     return { uid: loginRes, username: usernameRes };
   });
 
+export const signInCheck = createAsyncThunk('user/signInCheck',
+  async (uid:string | undefined) => {
+    if (uid) {
+      const usernameRes = await getUsername(uid);
+      return { uid, username: usernameRes };
+    }
+    throw new Error();
+  });
+
 export const logOut = createAsyncThunk('user/logOut', async () => {
   await logoutUser();
 });
@@ -26,11 +35,16 @@ export const logOut = createAsyncThunk('user/logOut', async () => {
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    uid: '', username: '', isLoggedIn: false, isError: false, errorMessage: '',
+    uid: '',
+    username: '',
+    isLoggedIn: false,
+    isPending: true,
+    isError: false,
+    errorMessage: '',
   } as UserData,
   reducers: {
     clearState(state) {
-      return { ...state, isError: false };
+      return { ...state, isError: false, isPending: false };
     },
   },
   extraReducers: {
@@ -49,6 +63,17 @@ export const userSlice = createSlice({
     [logOut.fulfilled.toString()]: (state) => ({
       ...state, isLoggedIn: false,
     }),
+    [signInCheck.fulfilled.toString()]: (state, action) => ({
+      ...state,
+      uid: action.payload.uid,
+      username: action.payload.username,
+      isLoggedIn: true,
+      isPending: false,
+    }),
+    [signInCheck.rejected.toString()]: (state) => ({
+      ...state, isPending: false,
+    }),
+    [signInCheck.pending.toString()]: (state) => ({ ...state, isPending: true }),
   },
 });
 

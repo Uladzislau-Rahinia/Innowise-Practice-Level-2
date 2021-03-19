@@ -8,6 +8,7 @@ export interface UserData {
     uid : string,
     username : string,
     isLoggedIn : boolean,
+    isPending: boolean,
     isError: boolean,
     errorMessage: string
 }

@@ -10,6 +10,7 @@ import RegisterPage from 'core/pages/Register';
 import HomePage from 'core/pages/HomePage';
 import Paint from 'core/pages/Paint';
 import LINKS from 'core/utils/constants/links';
+import PrivateRoute from 'core/utils/PrivateRoute';
 
 const App: React.FC = () => (
   <Router>
@@ -21,12 +22,8 @@ const App: React.FC = () => (
       <Route path={LINKS.REGISTER}>
         <RegisterPage />
       </Route>
-      <Route path={LINKS.HOME}>
-        <HomePage />
-      </Route>
-      <Route path={LINKS.PAINT}>
-        <Paint />
-      </Route>
+      <PrivateRoute component={HomePage} path={LINKS.HOME} />
+      <PrivateRoute component={Paint} path={LINKS.PAINT} />
     </Switch>
   </Router>
 );
