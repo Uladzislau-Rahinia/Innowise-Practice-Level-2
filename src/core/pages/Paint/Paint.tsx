@@ -160,7 +160,7 @@ const Paint: React.FC = () => {
   const handleColorPick = useCallback((e) => { setColor(e.currentTarget.id); }, []);
 
   return (
-    <PaintWrapper>
+    <PaintWrapper isPainting={isPainting}>
       <span>Draw here</span>
       <StyledCanvas
         ref={canvasRef}

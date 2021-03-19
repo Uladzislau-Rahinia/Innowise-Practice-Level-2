@@ -4,12 +4,13 @@ export const StyledCanvas = styled.canvas`
     border: 5px solid black;
 `;
 
-export const PaintWrapper = styled.div`
+export const PaintWrapper = styled.div<{isPainting:boolean}>`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items:center;
     min-height: 100vh;
+    ${(props) => (props.isPainting ? 'overflow:hidden; height:100vh;' : '')}
     & > span {
         font-size: 50px;
         font-weight: bolder;
