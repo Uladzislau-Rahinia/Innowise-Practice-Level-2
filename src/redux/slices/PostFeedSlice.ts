@@ -14,23 +14,20 @@ export const savePost = createAsyncThunk('postsFeed/savePost',
     const imgURL = await getImage(imgPath);
     const newPost = { path: imgURL, author: username, date: new Date(Date.now()).toString() };
     await addNewPost(newPost, 'posts');
+    return newPost;
   });
 
 export const PostsFeedSlice = createSlice({
   name: 'postsFeed',
   initialState: [] as Post[],
   reducers: {
-    // setPosts(state, action: PayloadAction<Post[]>) {
-    //   // action.payload.map((farmerMap) => state.push(farmerMap));
-    // },
   },
   extraReducers: {
     [fetchPosts.fulfilled.toString()]: (state, action:PayloadAction<Post>) => (
       Object.entries(action.payload).map((postsFeed) => postsFeed[1])
     ),
-    [fetchPosts.rejected.toString()]: (state, action) => {
-      // action.payload.map((postsFeed) => state.push(postsFeed));
-      console.log(action);
+    [savePost.fulfilled.toString()]: (state, action:PayloadAction<Post>) => {
+      state.push(action.payload);
     },
   },
 });

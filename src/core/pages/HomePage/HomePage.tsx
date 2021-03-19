@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Button from 'core/components/styled/Button';
 import ButtonLink from 'core/components/styled/Link';
 import LINKS from 'core/utils/constants/links';

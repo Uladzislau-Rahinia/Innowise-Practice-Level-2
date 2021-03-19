@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createUser, getUsername } from 'core/services/firebaseDBQueries';
 import {
   loginUser, logoutUser, registerUser,

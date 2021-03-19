@@ -44,7 +44,6 @@ const Paint: React.FC = () => {
   }, []);
 
   const loadSnapshot = useCallback(() => {
-    console.log(snapshot);
     if (snapshot) { ctx?.putImageData(snapshot, 0, 0); }
   }, [snapshot]);
 
@@ -53,7 +52,6 @@ const Paint: React.FC = () => {
     if (nativeEvent instanceof TouchEvent) {
       const touch = nativeEvent as TouchEvent;
       const { pageX, pageY } = touch.touches[0];
-      console.log(touch.touches[0]);
       setPrevPosition({
         offsetX: pageX - canvasRef.current!.offsetLeft,
         offsetY: pageY - canvasRef.current!.offsetTop,
@@ -70,7 +68,6 @@ const Paint: React.FC = () => {
   const paint = (currPosition : Position) => {
     const { offsetX, offsetY } = currPosition;
     const { offsetX: x, offsetY: y } = prevPos;
-    console.log(prevPos, currPosition);
     if (ctx) {
       const deltaX = x - offsetX;
       const deltaY = y - offsetY;
