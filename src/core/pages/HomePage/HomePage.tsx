@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import Button from 'core/components/styled/Button';
 import ButtonLink from 'core/components/styled/Link';
 import LINKS from 'core/utils/constants/links';
@@ -17,6 +17,10 @@ const HomePage:React.FC = () => {
   const { isLoggedIn } = useSelector(getUserData);
 
   const dispatch = useDispatch();
+
+  useLayoutEffect(() => {
+    window.scroll(0, 0);
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {

@@ -48,7 +48,6 @@ const Paint: React.FC = () => {
   }, [snapshot]);
 
   const handleMouseDown = ({ nativeEvent } : SyntheticEvent) => {
-    nativeEvent.preventDefault();
     if (nativeEvent instanceof TouchEvent) {
       const touch = nativeEvent as TouchEvent;
       const { pageX, pageY } = touch.touches[0];
