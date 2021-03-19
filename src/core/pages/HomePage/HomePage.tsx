@@ -2,7 +2,6 @@ import React, { useEffect, useLayoutEffect } from 'react';
 import Button from 'core/components/styled/Button';
 import ButtonLink from 'core/components/styled/Link';
 import LINKS from 'core/utils/constants/links';
-
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPosts } from 'redux/slices/PostFeedSlice';

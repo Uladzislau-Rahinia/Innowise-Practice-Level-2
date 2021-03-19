@@ -15,7 +15,6 @@ export const createUser = async (uid:string, username:string):Promise<boolean> =
 export const getPosts = async (route:string):Promise<Posts> => {
   const postsRef = database.ref(route);
   return postsRef.get().then((snapshot) => {
-    console.log(snapshot);
     if (snapshot.exists()) {
       return snapshot.val();
     }
@@ -32,7 +31,6 @@ export const addNewPost = async (newPost:Post, route:string):Promise<boolean> =>
 export const getUsername = async (uid:string):Promise<string> => {
   const postsRef = database.ref(`users/${uid}/username`);
   return postsRef.get().then((snapshot) => {
-    console.log(snapshot);
     if (snapshot.exists()) {
       return snapshot.val();
     }

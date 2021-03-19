@@ -4,7 +4,7 @@ import { v4 } from 'uuid';
 export const saveImage = async (data:string, uid:string):Promise<string> => storage.ref()
   .child(`images/${uid}/${v4()}.png`)
   .putString(data, 'data_url')
-  .then((snapshot) => { console.log(snapshot); return snapshot.metadata.fullPath; })
+  .then((snapshot) => snapshot.metadata.fullPath)
   .catch((error) => {
     throw error;
   });

@@ -26,6 +26,7 @@ const Paint: React.FC = () => {
   const [color, setColor] = useState('black');
   const [instrument, setInstrument] = useState('0');
   const [lineWidth, setLineWidth] = useState('1');
+  const [canvasSize, setCanvasSize] = useState(500);
 
   const history = useHistory();
 
@@ -38,9 +39,15 @@ const Paint: React.FC = () => {
   }, [isLoggedIn]);
 
   useLayoutEffect(() => {
+    window.onresize = (() => {
+      setCanvasSize(window.outerWidth < 500 ? window.outerWidth * 0.95 : 500);
+    });
     if (canvasRef && canvasRef.current) {
       setCtx(canvasRef.current.getContext('2d'));
     }
+    return () => {
+      window.onresize = null;
+    };
   }, []);
 
   const loadSnapshot = useCallback(() => {
@@ -168,8 +175,8 @@ const Paint: React.FC = () => {
         onMouseLeave={endPainting}
         onMouseUp={endPainting}
         id="canvas"
-        width={window.outerWidth < 500 ? window.outerWidth * 0.95 : 500}
-        height={window.outerWidth < 500 ? window.outerWidth * 0.95 : 500}
+        width={canvasSize}
+        height={canvasSize}
       />
       <ControlPanel
         pickedColor={color}
