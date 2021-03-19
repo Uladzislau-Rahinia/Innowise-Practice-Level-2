@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { useSelector, useStore } from 'react-redux';
+import { useSelector } from 'react-redux';
 import getPosts from 'redux/selectors/PostFeedSelector';
 import { formatDistance, compareDesc } from 'date-fns';
 import TextInput from 'core/components/styled/TextInput';

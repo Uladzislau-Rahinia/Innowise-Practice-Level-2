@@ -55,12 +55,12 @@ const Paint: React.FC = () => {
   }, [snapshot]);
 
   const handleMouseDown = ({ nativeEvent } : SyntheticEvent) => {
-    if (nativeEvent instanceof TouchEvent) {
+    if (nativeEvent instanceof TouchEvent && canvasRef.current) {
       const touch = nativeEvent as TouchEvent;
       const { pageX, pageY } = touch.touches[0];
       setPrevPosition({
-        offsetX: pageX - canvasRef.current!.offsetLeft,
-        offsetY: pageY - canvasRef.current!.offsetTop,
+        offsetX: pageX - canvasRef.current.offsetLeft,
+        offsetY: pageY - canvasRef.current.offsetTop,
       });
     } else {
       const { offsetX, offsetY } = nativeEvent as MouseEvent;
@@ -74,7 +74,7 @@ const Paint: React.FC = () => {
   const paint = (currPosition : Position) => {
     const { offsetX, offsetY } = currPosition;
     const { offsetX: x, offsetY: y } = prevPos;
-    if (ctx) {
+    if (ctx && canvasRef.current) {
       const deltaX = x - offsetX;
       const deltaY = y - offsetY;
       const radius = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -89,15 +89,15 @@ const Paint: React.FC = () => {
           setPrevPosition({ offsetX, offsetY });
           break;
         case '1':
-          ctx.clearRect(0, 0, canvasRef.current!.width,
-            canvasRef.current!.height);
+          ctx.clearRect(0, 0, canvasRef.current.width,
+            canvasRef.current.height);
           loadSnapshot();
           ctx.moveTo(x, y);
           ctx.lineTo(offsetX, offsetY);
           break;
         case '2':
-          ctx.clearRect(0, 0, canvasRef.current!.width,
-            canvasRef.current!.height);
+          ctx.clearRect(0, 0, canvasRef.current.width,
+            canvasRef.current.height);
           loadSnapshot();
           ctx.rect(
             x,
@@ -107,8 +107,8 @@ const Paint: React.FC = () => {
           );
           break;
         case '3':
-          ctx.clearRect(0, 0, canvasRef.current!.width,
-            canvasRef.current!.height);
+          ctx.clearRect(0, 0, canvasRef.current.width,
+            canvasRef.current.height);
           loadSnapshot();
 
           ctx.arc(x, y, radius, 0, Math.PI * 2);
@@ -122,12 +122,12 @@ const Paint: React.FC = () => {
   const handleMouseMove = ({ nativeEvent } : SyntheticEvent) => {
     if (isPainting) {
       let currPos: Position;
-      if (nativeEvent instanceof TouchEvent) {
+      if (nativeEvent instanceof TouchEvent && canvasRef.current) {
         const touch = nativeEvent as TouchEvent;
         const { pageX, pageY } = touch.touches[0];
         currPos = ({
-          offsetX: pageX - canvasRef.current!.offsetLeft,
-          offsetY: pageY - canvasRef.current!.offsetTop,
+          offsetX: pageX - canvasRef.current.offsetLeft,
+          offsetY: pageY - canvasRef.current.offsetTop,
         });
       } else {
         const { offsetX, offsetY } = nativeEvent as MouseEvent;
@@ -139,7 +139,14 @@ const Paint: React.FC = () => {
 
   const endPainting = () => {
     setIsPainting(false);
-    setSnapshot(ctx!.getImageData(0, 0, canvasRef.current!.width, canvasRef.current!.height));
+    if (ctx && canvasRef.current) {
+      setSnapshot(ctx.getImageData(
+        0,
+        0,
+        canvasRef.current.width,
+        canvasRef.current.height,
+      ));
+    }
   };
 
   const handleClear = () => {

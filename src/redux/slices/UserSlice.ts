@@ -19,7 +19,7 @@ export const signIn = createAsyncThunk('user/signIn',
     return { uid: loginRes, username: usernameRes };
   });
 
-export const signInCheck = createAsyncThunk('user/signInCheck',
+export const signInCheckResult = createAsyncThunk('user/signInCheckResult',
   async (uid:string | undefined) => {
     if (uid) {
       const usernameRes = await getUsername(uid);
@@ -63,17 +63,17 @@ export const userSlice = createSlice({
     [logOut.fulfilled.toString()]: (state) => ({
       ...state, isLoggedIn: false,
     }),
-    [signInCheck.fulfilled.toString()]: (state, action) => ({
+    [signInCheckResult.fulfilled.toString()]: (state, action) => ({
       ...state,
       uid: action.payload.uid,
       username: action.payload.username,
       isLoggedIn: true,
       isPending: false,
     }),
-    [signInCheck.rejected.toString()]: (state) => ({
+    [signInCheckResult.rejected.toString()]: (state) => ({
       ...state, isPending: false,
     }),
-    [signInCheck.pending.toString()]: (state) => ({ ...state, isPending: true }),
+    [signInCheckResult.pending.toString()]: (state) => ({ ...state, isPending: true }),
   },
 });
 
