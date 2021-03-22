@@ -1,46 +1,71 @@
-# Getting Started with Create React App
+# Innowise Lab Internship: Level 2: Mini Paint
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Paint-like app for Innowise Lab Internship by Uladzislau Rahinia. Created using React, Redux and Firebase
 
-## Available Scripts
+## Task
 
-In the project directory, you can run:
+You can find task requirements [here](https://docs.google.com/document/d/1K79_NA4lMYfqQiIJGqLDek1K9z-oc2qg8n4AvrN1PXE/edit)
 
-### `npm start`
+## How to run the app
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This app is hosted on Github Pages. You can use link [here](https://uladzislau-rahinia.github.io/Innowise-Practice-Level-2/)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+If you want run this app locally, clone or fork this repository.
 
-### `npm test`
+To clone use **git clone https://github.com/Uladzislau-Rahinia/Innowise-Practice-Level-2** command.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+After clonning you will have to run **npm i** command to get all dependencies.
 
-### `npm run build`
+**For working locally you will need an .env file with firebase api keys. You can contact me or create your own.**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+**If you want to make pull request, do it to master branch, it holds source code**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Database snapshot
+    .
+    ├──posts
+    |   └──postid                #Unique post id generated on creating post           
+    |        ├──path             #Link to image in store
+    |        ├──author           #Author's username
+    |        └──date             #Date of creation
+    └──users
+          └──uid                 #Unique user id generated on signing up new user
+              └──username        #Username chosen by user
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Application stack
 
-### `npm run eject`
+List of additional packages I used for this app (aside from React, Redux and Firebase)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### React-router
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Used to add routing into app
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Styled components
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Used for more efficient and more deep style customizing
 
-## Learn More
+### React-toastify
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Use to add Toast messages in error cases
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Date-fns
+
+Used to format date in string for better use
+
+### Gh-pages
+
+Used to deploy app to Github Pages
+
+## Folder structure
+    └──src                            #Main folder for source code       
+        ├──app                        #Holds main component, redux store and root reducer
+        ├──core
+        |   ├──api                    #Holds api initializing script
+        |   ├──assets                 #Media assets like images, fonts, etc.
+        |   |──components             #Small components, which don't hold any business logic, can be reused in different pages
+        |   ├──pages                  #Big components, representing pages this app has, they hold buisness logic like fetching data
+        |   ├──services               #Services like data fetching and sending methods
+        |   └──utils                  #Utility features like constants and types
+        ├──redux                      #Holds all redux code
+        ├   ├──slices                 #Holds redux slices with actions and reducers
+        |   └──selectors              #Holds selectors for retrieving data from store
+        └──index.js                   #Entry point of an app, renders main component
