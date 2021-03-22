@@ -153,6 +153,7 @@ const Paint: React.FC = () => {
     if (ctx && canvasRef && canvasRef.current) {
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     }
+    setSnapshot(undefined);
   };
 
   const handleSave = async () => {
